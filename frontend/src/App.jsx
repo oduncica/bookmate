@@ -13,7 +13,7 @@ import IgnoredBooks from "./components/IgnoredBooks";
 import AdvancedSearch from "./components/AvancedSearch";
 import Questionnaire from "./components/Questionnaire";
 import Navbar from "./components/Navbar";
-import SignUpForm from "./components//SignUpForm";
+import SignUpForm from "./components/SignUpForm";
 import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
+      {authUser && <Navbar />}
       <div>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
