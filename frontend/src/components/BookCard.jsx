@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import { FaBook, FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
+import { FaBook, FaCheck, FaTimes, FaInfoCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import Modal from 'react-modal';
 
 const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, onDelete, isLibraryView }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
   return (
-    <div className="max-w-md rounded-lg overflow-hidden shadow-lg m-2 bg-white text-[#3A3A64]">
+    <div className="relative max-w-md rounded-lg overflow-hidden shadow-lg m-2 bg-white text-[#3A3A64]">
+  {/* Bouton Détails en haut à droite */}
+  <button
+    onClick={openModal}
+    className="absolute top-2 right-2 text-[#3A3A64]"
+    title="Voir les détails"
+  >
+    <i className="fas fa-up-right-from-square"></i>
+  </button>
+
+
       <div className="flex">
         {/* Image à gauche */}
         {book.image ? (
@@ -28,8 +33,8 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
         {/* Contenu à droite */}
         <div className="flex-1 px-4 py-2">
           <div className="font-bold text-md mb-2" style={{ fontFamily: 'Platypi, sans-serif' }}>
-          {book.title}
-        </div>
+            {book.title}
+          </div>
           <p className="text-[#3A3A64] text-xs">
             {Array.isArray(book.authors) ? book.authors.join(', ') : 'Auteur inconnu'}
           </p>
@@ -43,53 +48,54 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
             ))}
           </div>
 
-          {/* Boutons */}
-          <div className="mt-2 flex justify-start space-x-2">
-            <button
-              onClick={openModal}
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded flex items-center"
-              title="Voir les détails"
-            >
-              <FaInfoCircle className="mr-2" />
-              Détails
-            </button>
-            {isLibraryView ? (
-              <button
-                onClick={onDelete}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                title="Supprimer"
-              >
-                <FaTimes />
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={onAddToRead}
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                  title="Ajouter à 'à lire'"
-                >
-                  <FaBook />
-                </button>
-                <button
-                  onClick={onAddToReadBooks}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                  title="Ajouter à 'Lu'"
-                >
-                  <FaCheck />
-                </button>
-                <button
-                  onClick={onAddToDislikedBooks}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                  title="Ajouter à 'Pas intéressé'"
-                >
-                  <FaTimes />
-                </button>
-              </>
-            )}
-          </div>
+          {/* Boutons d'action (sans Détails) */}
+<div className="mt-2 flex justify-start space-x-2">
+  {isLibraryView ? (
+    <button
+      onClick={onDelete}
+      className="bg-[#D25C28] hover:bg-[#D25C28] text-white font-bold py-1 px-2 rounded flex items-center"
+      title="Supprimer"
+    >
+      <FaTimes />
+    </button>
+  ) : (
+    <>
+      <button
+        onClick={onAddToRead}
+        className="bg-[#4D9F38] hover:bg-[#4D9F38] text-white font-bold py-1 px-2 rounded flex items-center"
+        title="Ajouter à 'à lire'"
+      >
+        <img
+          src="/save_icon.png"
+          alt="Sauvegarder"
+          className="max-w-4 max-h-4 w-auto h-auto"
+        />
+      </button>
+      <button
+        onClick={onAddToReadBooks}
+        className="bg-[#67AAB3] hover:bg-[#56949B] text-white font-bold py-1 px-2 rounded flex items-center"
+        title="Ajouter à 'Lu'"
+      >
+        <img
+          src="/dejalu_icon.png"
+          alt="Déjà lu"
+          className="max-w-5 max-h-5 w-auto h-auto"
+        />
+      </button>
+      <button
+        onClick={onAddToDislikedBooks}
+        className="bg-[#D25C28] hover:bg-[#D25C28] text-white font-bold py-1 px-2 rounded flex items-center"
+        title="Ajouter à 'Pas intéressé'"
+      >
+        <FaTimes />
+      </button>
+    </>
+  )}
+</div>
         </div>
       </div>
 
+      {/* MODAL */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
