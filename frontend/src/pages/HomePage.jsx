@@ -57,7 +57,7 @@ const HomePage = () => {
         backgroundColor: "#3A3A64", // Violet background
       }}
     >
-      <img src="/logoHorizontal.png" alt="Logo" className="mb-4" />
+      <img src="/logoHorizontal.png" alt="Logo" className="mb-2" />
       <div className="flex justify-center items-center w-full h-full">
         {Array.isArray(suggestions) && suggestions.length > 0 ? (
           <TinderBookCard

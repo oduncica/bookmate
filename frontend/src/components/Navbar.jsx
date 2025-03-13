@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-[#FFFFFF] p-4 flex justify-between items-center z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-[#FFFFFF] p-4 flex justify-between items-center">
       <Link
         to="/home"
         className="text-black hover:text-gray-700 flex flex-col items-center"
