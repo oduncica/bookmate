@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import HomePage from "./pages/HomePage";
-import AuthPage from "./pages/AuthPage";
+import WelcomeScreen from "./pages/WelcomeScreen";
 import ProfilePage from "./pages/ProfilePage";
 import LibraryView from "./pages/LibraryView";
 import ForgotPassword from "./components/ForgotPassword";
@@ -33,7 +33,7 @@ function App() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route
             path="/auth"
-            element={!authUser ? <AuthPage /> : <Navigate to="/home" />}
+            element={!authUser ? <WelcomeScreen /> : <Navigate to="/home" />}
           />
           <Route
             path="/signup"

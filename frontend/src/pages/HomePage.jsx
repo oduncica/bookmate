@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSuggestionsStore } from "../store/useSuggestionsStore"; 
+import { useSuggestionsStore } from "../store/useSuggestionsStore";
 import TinderBookCard from "../components/TinderBookCard";
 import { useSwipeable } from "react-swipeable";
 
