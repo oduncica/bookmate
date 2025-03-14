@@ -13,13 +13,14 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/signup", signupData);
       set({ authUser: res.data.user });
       localStorage.setItem("jwt", res.data.token); // Stocker le token JWT
-      await axiosInstance.post("/auth/preferences", {
-        bookPreferences: signupData.bookPreferences,
-      });
+      // await axiosInstance.post("/auth/preferences", {
+      //   bookPreferences: signupData.bookPreferences,
+      // });
       toast.success("Account created successfully");
       navigate("/home"); // Rediriger vers la page d'accueil
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message);
+      // toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       set({ loading: false });
     }
@@ -33,7 +34,8 @@ export const useAuthStore = create((set) => ({
       localStorage.setItem("jwt", res.data.token); // Stocker le token JWT
       toast.success("Logged in successfully");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message);
+      // toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       set({ loading: false });
     }

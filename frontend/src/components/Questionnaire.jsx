@@ -66,60 +66,60 @@ const genres = {
 
 // Liste de couleurs associées
 const colorMap = {
-  "Horreur": "bg-custom-blue",
-  "Romance": "bg-custom-orange",
-  "Réaliste": "bg-custom-yellow",
-  "Thriller": "bg-custom-green",
-  "Mystère": "bg-custom-green2",
+  Horreur: "bg-custom-blue",
+  Romance: "bg-custom-orange",
+  Réaliste: "bg-custom-yellow",
+  Thriller: "bg-custom-green",
+  Mystère: "bg-custom-green2",
   "Science-fiction": "bg-custom-turquoise",
-  "Fantaisie": "bg-custom-darker-orange",
-  "Aventure": "bg-light-blue",
-  "Drame": "bg-light-yellow",
+  Fantaisie: "bg-custom-darker-orange",
+  Aventure: "bg-light-blue",
+  Drame: "bg-light-yellow",
   "Santé et bien-être": "bg-light-pink",
-  "Musique": "bg-soft-pink",
-  "Recettes": "bg-lavender",
-  "Technologie": "bg-blue-light",
-  "Philosophie": "bg-custom-dark-blue",
-  "Histoire": "bg-violet",
-  "Arts": "bg-dark-green",
-  "Science": "bg-orange",
-  "Psychologie": "bg-lu-color",
-  "Sports": "bg-aLire-color",
-  "Essai": "bg-custom-blue",
-  "Autobiographie": "bg-custom-orange",
-  "Sociologie": "bg-custom-yellow",
-  "Environnement": "bg-custom-green",
+  Musique: "bg-soft-pink",
+  Recettes: "bg-lavender",
+  Technologie: "bg-blue-light",
+  Philosophie: "bg-custom-dark-blue",
+  Histoire: "bg-violet",
+  Arts: "bg-dark-green",
+  Science: "bg-orange",
+  Psychologie: "bg-lu-color",
+  Sports: "bg-aLire-color",
+  Essai: "bg-custom-blue",
+  Autobiographie: "bg-custom-orange",
+  Sociologie: "bg-custom-yellow",
+  Environnement: "bg-custom-green",
   "Développement personnel": "bg-custom-green2",
   "Coming of age": "bg-custom-turquoise",
-  "Poésie": "bg-custom-darker-orange",
+  Poésie: "bg-custom-darker-orange",
   "Littérature LGBTQ+": "bg-light-blue",
   "Littérature africaine": "bg-light-yellow",
   "Littérature asiatique": "bg-light-pink",
   "Littérature latino-américaine": "bg-soft-pink",
   "Littérature européenne": "bg-lavender",
   "Littérature autochtone": "bg-blue-light",
-  "Nouvelle": "bg-custom-dark-blue",
+  Nouvelle: "bg-custom-dark-blue",
   "Littérature française": "bg-violet",
-  "Classique": "bg-dark-green",
-  "Mythologie": "bg-orange",
+  Classique: "bg-dark-green",
+  Mythologie: "bg-orange",
   "Contes de fées": "bg-lu-color",
   "Voyage dans le temps": "bg-aLire-color",
-  "Cyberpunk": "bg-custom-blue",
-  "Steampunk": "bg-custom-orange",
-  "Western": "bg-custom-yellow",
-  "Gothique": "bg-custom-green",
+  Cyberpunk: "bg-custom-blue",
+  Steampunk: "bg-custom-orange",
+  Western: "bg-custom-yellow",
+  Gothique: "bg-custom-green",
   "Utopie/Dystopie": "bg-custom-green2",
   "Chick-lit": "bg-custom-turquoise",
-  "Politique": "bg-custom-darker-orange",
-  "Scientifique": "bg-light-blue",
-  "Sportive": "bg-light-yellow",
-  "Artistique": "bg-light-pink",
-  "Épique": "bg-soft-pink",
-  "Lyrique": "bg-lavender",
-  "Satirique": "bg-blue-light",
-  "Narrative": "bg-custom-dark-blue",
-  "Comédie": "bg-violet",
-  "Tragédie": "bg-dark-green",
+  Politique: "bg-custom-darker-orange",
+  Scientifique: "bg-light-blue",
+  Sportive: "bg-light-yellow",
+  Artistique: "bg-light-pink",
+  Épique: "bg-soft-pink",
+  Lyrique: "bg-lavender",
+  Satirique: "bg-blue-light",
+  Narrative: "bg-custom-dark-blue",
+  Comédie: "bg-violet",
+  Tragédie: "bg-dark-green",
   "Drame historique": "bg-orange",
   "Théâtre de l'absurde": "bg-lu-color",
 };
@@ -179,26 +179,30 @@ const Questionnaire = () => {
       >
         Quels genres de livres aimez-vous ?
       </h4>
-      <div className="flex flex-wrap gap-4 justify-start mb-6"> {/* Alignement à gauche */}
+      <div className="flex flex-wrap gap-4 justify-start mb-6">
+        {" "}
+        {/* Alignement à gauche */}
         {Object.entries(genres).map(([genre, subGenres], index) => (
           <div key={index} className="w-full">
             <h4 className="text-xl text-white mb-2 text-left font-nunito">
               {genre}
             </h4>
-            <div className="flex flex-wrap gap-3 justify-start mb-4"> {/* Réduction de l'espace entre les boutons */}
+            <div className="flex flex-wrap gap-3 justify-start mb-4">
+              {" "}
+              {/* Réduction de l'espace entre les boutons */}
               {(expandedGenres[genre] ? subGenres : subGenres.slice(0, 3)).map(
                 (subGenre, subIndex) => (
                   <button
-                  key={subIndex}
-                  className={`px-3 py-1.5 rounded-full border font-bold text-white font-nunito transition-transform transform ${
-                    selectedGenres.includes(subGenre)
-                      ? `${colorMap[subGenre]} border-none scale-105` // Suppression de border-white quand sélectionné
-                      : "bg-transparent border-white text-white hover:scale-105"
-                  }`}
-                  onClick={() => handleSelectGenre(subGenre)}
-                >
-                  {subGenre}
-                </button>
+                    key={subIndex}
+                    className={`px-3 py-1.5 rounded-full border font-bold text-white font-nunito transition-transform transform ${
+                      selectedGenres.includes(subGenre)
+                        ? `${colorMap[subGenre]} border-none scale-105` // Suppression de border-white quand sélectionné
+                        : "bg-transparent border-white text-white hover:scale-105"
+                    }`}
+                    onClick={() => handleSelectGenre(subGenre)}
+                  >
+                    {subGenre}
+                  </button>
                 )
               )}
               {subGenres.length > 3 && (
