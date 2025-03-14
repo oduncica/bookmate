@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { toast } from "react-hot-toast";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
-  faBook,
   faGavel,
   faLock,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { FaFire } from "react-icons/fa"; // Import de FaFire
+import { FaFire } from "react-icons/fa";
 
 const ProfilePage = () => {
   const { authUser, logout, updateProfile } = useAuthStore();
@@ -21,19 +19,20 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [showPreferencesField, setShowPreferencesField] = useState(false);
-  const [showUpdateButton, setShowUpdateButton] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (authUser) {
       setEmail(authUser.email);
-      setBookPreferences(authUser.bookPreferences.join(", "));
+      setBookPreferences(authUser.bookPreferences?.join(", ") || "");
     }
   }, [authUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Vérification des erreurs
     if (!bookPreferences) {
       setError("Le champ des préférences de lecture est obligatoire");
       return;
@@ -44,13 +43,23 @@ const ProfilePage = () => {
       );
       return;
     }
+
     setLoading(true);
+
+    // Transformation de bookPreferences en tableau
+    const preferencesArray = bookPreferences
+      .split(",")
+      .map((pref) => pref.trim())
+      .filter((pref) => pref.length > 0);
+
     try {
+      // Envoi des données sous forme de tableau
       await updateProfile({
-        bookPreferences: bookPreferences.split(", "),
+        newBookPreferences: preferencesArray, // Assurez-vous d'envoyer un tableau
         oldPassword,
         newPassword,
       });
+
       toast.success("Profil mis à jour avec succès");
     } catch (error) {
       toast.error("Erreur lors de la mise à jour du profil");
@@ -58,48 +67,27 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
-
-  const handlePreferencesClick = () => {
-    const newShowPreferencesField = !showPreferencesField;
-    setShowPreferencesField(newShowPreferencesField);
-    setShowUpdateButton(newShowPreferencesField || showPasswordFields);
-  };
-
-  const handlePasswordClick = () => {
-    const newShowPasswordFields = !showPasswordFields;
-    setShowPasswordFields(newShowPasswordFields);
-    setShowUpdateButton(newShowPasswordFields || showPreferencesField);
-  };
-
   return (
     <div
       className="min-h-screen bg-cover bg-center flex flex-col items-center p-6"
       style={{
         backgroundImage: "url('/bg_image.png')",
-        backgroundSize: "200%",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: "#3A3A64", // Violet background
+        backgroundColor: "#3A3A64",
       }}
     >
-      {/* Logo centré en haut */}
+      {/* Logo */}
       <div className="w-full flex justify-center mb-4">
-        <img
-          src="/logoHorizontal.png"
-          alt="Logo"
-          style={{ width: "auto", height: "auto" }} // Conserve les dimensions originales
-        />
+        <img src="/logoHorizontal.png" alt="Logo" className="w-auto h-auto" />
       </div>
 
-      {/* Email centré en haut */}
-      <div className="w-full text-center mb-4"> {/* Réduire la marge inférieure si nécessaire */}
-        <p className="text-xl text-white font-platypi">{email}</p> {/* Changer text-2xl en text-xl */}
+      {/* Email utilisateur */}
+      <div className="w-full text-center mb-4">
+        <p className="text-xl text-white font-platypi">{email}</p>
       </div>
 
       {/* Section Mes recommandations */}
       <div className="w-full max-w-md mb-6">
         <div className="flex items-center mb-2">
-          {/* Remplacement de faBook par FaFire avec une taille cohérente */}
           <FaFire className="text-white mr-2 text-lg" />
           <p className="text-xl font-bold text-white font-platypi">
             Mes recommandations
@@ -107,35 +95,31 @@ const ProfilePage = () => {
         </div>
         <hr className="border-t-2 border-gray-300 mb-4" />
 
-        {/* Mes genres de livres préférés */}
+        {/* Modifier les préférences */}
         <div className="flex justify-between items-center mb-4">
           <p className="text-lg text-white font-nunito">
             Mes genres de livres préférés
           </p>
-          <button onClick={handlePreferencesClick} className="text-white">
+          <button
+            onClick={() => setShowPreferencesField(!showPreferencesField)}
+            className="text-white"
+          >
             <FontAwesomeIcon icon={faChevronRight} size="lg" />
           </button>
         </div>
 
         {showPreferencesField && (
           <div className="mb-4">
-            <label
-              htmlFor="bookPreferences"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Préférences de lecture (séparées par des virgules)
+            <label className="block text-sm font-medium text-gray-700">
+              Préférences de lecture
             </label>
-            <div className="mt-1">
-              <input
-                id="bookPreferences"
-                name="bookPreferences"
-                type="text"
-                required
-                value={bookPreferences}
-                onChange={(e) => setBookPreferences(e.target.value)}
-                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
-              />
-            </div>
+            <input
+              type="text"
+              value={bookPreferences}
+              onChange={(e) => setBookPreferences(e.target.value)}
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none"
+              placeholder="Ex: Science-fiction, Fantasy, Thriller"
+            />
           </div>
         )}
 
@@ -160,17 +144,13 @@ const ProfilePage = () => {
         </div>
         <hr className="border-t-2 border-gray-300 mb-4" />
 
-        {/* Conditions générales d'utilisation */}
         <div className="flex justify-between items-center mb-4">
-          <p className="text-lg text-white font-nunito">
-            Conditions générales d'utilisation
-          </p>
+          <p className="text-lg text-white font-nunito">Conditions générales</p>
           <Link to="/terms" className="text-white">
             <FontAwesomeIcon icon={faChevronRight} size="lg" />
           </Link>
         </div>
 
-        {/* Politique de confidentialité */}
         <div className="flex justify-between items-center">
           <p className="text-lg text-white font-nunito">
             Politique de confidentialité
@@ -198,65 +178,35 @@ const ProfilePage = () => {
           <p className="text-lg text-white font-nunito">
             Changer de mot de passe
           </p>
-          <button onClick={handlePasswordClick} className="text-white">
+          <button
+            onClick={() => setShowPasswordFields(!showPasswordFields)}
+            className="text-white"
+          >
             <FontAwesomeIcon icon={faChevronRight} size="lg" />
           </button>
         </div>
 
         {showPasswordFields && (
           <>
-            <div>
-              <label
-                htmlFor="oldPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Ancien mot de passe
-              </label>
-              <div className="mt-1">
-                <input
-                  id="oldPassword"
-                  name="oldPassword"
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="newPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Nouveau mot de passe
-              </label>
-              <div className="mt-1">
-                <input
-                  id="newPassword"
-                  name="newPassword"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
-                />
-              </div>
-            </div>
+            <input
+              type="password"
+              placeholder="Ancien mot de passe"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded-md shadow-sm mb-2"
+            />
+            <input
+              type="password"
+              placeholder="Nouveau mot de passe"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded-md shadow-sm"
+            />
           </>
         )}
-
-        {/* Supprimer mon compte */}
-        <div className="flex justify-between items-center">
-          <p className="text-lg text-white font-nunito">Supprimer mon compte</p>
-          <Link to="/delete-account" className="text-white">
-            <FontAwesomeIcon icon={faChevronRight} size="lg" />
-          </Link>
-        </div>
       </div>
 
-      {/* Ligne blanche entre Compte et Me déconnecter */}
-      <hr className="border-t-2 border-white w-full max-w-md mb-6" />
-
-      {/* Section Me déconnecter */}
+      {/* Bouton de déconnexion */}
       <div className="w-full max-w-md mb-6">
         <div className="flex items-center">
           <FontAwesomeIcon
@@ -273,23 +223,18 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Formulaire de mise à jour du profil */}
-      <div className="w-full max-w-md mb-6  rounded-lg p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Formulaire de mise à jour */}
+      {(showPasswordFields || showPreferencesField) && (
+        <form onSubmit={handleSubmit} className="w-full max-w-md">
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          {showUpdateButton && (
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                disabled={loading}
-              >
-                {loading ? "Mise à jour..." : "Mettre à jour le profil"}
-              </button>
-            </div>
-          )}
+          <button
+            type="submit"
+            className="w-full py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700"
+          >
+            {loading ? "Mise à jour..." : "Mettre à jour"}
+          </button>
         </form>
-      </div>
+      )}
     </div>
   );
 };

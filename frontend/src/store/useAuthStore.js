@@ -54,10 +54,14 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  updateProfile: async (profileData) => {
+  updateProfile: async ({ newBookPreferences, oldPassword, newPassword }) => {
     try {
-      const response = await axiosInstance.put("/users/update", profileData);
-      set({ user: response.data });
+      const response = await axiosInstance.put("/profile/update", {
+        newBookPreferences,
+        oldPassword,
+        newPassword,
+      });
+      set({ authUser: response.data.user }); // Mettez à jour l'utilisateur dans le store
       toast.success("Profil mis à jour avec succès");
     } catch (error) {
       console.error(
