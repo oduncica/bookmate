@@ -12,11 +12,11 @@ const HomePage = () => {
     fetchSuggestions();
   }, [fetchSuggestions]);
 
-  const handleSwipe = (direction) => {
-    if (direction === "right" && currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    } else if (direction === "left" && currentIndex < suggestions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+  const handleSwipe = async (direction) => {
+    if (direction === "right" && suggestions[currentIndex]) {
+      await handleLike(suggestions[currentIndex].id);
+    } else if (direction === "left" && suggestions[currentIndex]) {
+      await handleDislike(suggestions[currentIndex].id);
     }
   };
 
@@ -57,8 +57,10 @@ const HomePage = () => {
         backgroundColor: "#3A3A64", // Violet background
       }}
     >
-      <img src="/logoHorizontal.png" alt="Logo" className="mb-2" />
-      <div className="flex justify-center items-center w-full h-full">
+      <div
+        {...handlers} // Attacher les handlers ici pour capter les swipes
+        className="flex justify-center items-center w-full h-full"
+      >
         {Array.isArray(suggestions) && suggestions.length > 0 ? (
           <TinderBookCard
             book={suggestions[currentIndex]}

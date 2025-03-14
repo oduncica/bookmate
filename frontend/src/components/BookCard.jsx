@@ -1,88 +1,98 @@
-import React, { useState } from 'react';
-import { FaBook, FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaTimes, FaBookOpen, FaBookmark } from 'react-icons/fa';
 import Modal from 'react-modal';
+
+const colors = [
+  '#8dace5', '#f0743e', '#feb737', '#aad59f', '#2A621C', '#2e6168', '#d25c28',
+  '#d4e0f0', '#fde9ad', '#f6c3ae', '#f9b1b2', '#cdbcdc', '#9ab2d4', '#3A3A64',
+  '#543787', '#526049', '#f29b3a', '#67AAB3', '#4D9F38'
+];
 
 const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, onDelete, isLibraryView }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [tagColor, setTagColor] = useState('');
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+  useEffect(() => {
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    setTagColor(randomColor);
+  }, []);
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
 
   return (
     <div className="max-w-md rounded-lg overflow-hidden shadow-lg m-2 bg-white text-[#3A3A64]">
-      <div className="flex">
-        {/* Image à gauche */}
+      <div className="flex items-center">
         {book.image ? (
-          <img className="w-24 h-32 object-cover m-2" src={book.image} alt={book.title} />
+          <img 
+            className="w-24 h-32 object-cover m-2 ml-4 cursor-pointer" 
+            src={book.image} 
+            alt={book.title} 
+            onClick={openModal} 
+          />
         ) : (
-          <div className="w-24 h-32 bg-gray-200 flex items-center justify-center m-2">
+          <div 
+            className="w-24 h-32 bg-gray-200 flex items-center justify-center m-2 ml-4 cursor-pointer" 
+            onClick={openModal}
+          >
             <span className="text-gray-500">Image non disponible</span>
           </div>
         )}
 
-        {/* Contenu à droite */}
         <div className="flex-1 px-4 py-2">
           <div className="font-bold text-md mb-2" style={{ fontFamily: 'Platypi, sans-serif' }}>
-          {book.title}
-        </div>
+            {book.title}
+          </div>
           <p className="text-[#3A3A64] text-xs">
             {Array.isArray(book.authors) ? book.authors.join(', ') : 'Auteur inconnu'}
           </p>
 
-          {/* Tags */}
           <div className="mt-2">
-            {Array.isArray(book.categories) && book.categories.map((category) => (
-              <span key={category} className="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-[#3A3A64] mr-2 mb-2">
-                #{category}
+            {Array.isArray(book.categories) && book.categories.length > 0 && (
+              <span 
+                key={book.categories[0]} 
+                className="inline-block rounded-full px-2 py-1 text-xs font-semibold text-white mr-2 mb-2"
+                style={{ backgroundColor: tagColor }}
+              >
+                #{book.categories[0]}
               </span>
-            ))}
+            )}
           </div>
 
-          {/* Boutons */}
           <div className="mt-2 flex justify-start space-x-2">
-            <button
-              onClick={openModal}
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded flex items-center"
-              title="Voir les détails"
-            >
-              <FaInfoCircle className="mr-2" />
-              Détails
-            </button>
             {isLibraryView ? (
               <button
                 onClick={onDelete}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded flex items-center text-sm"
                 title="Supprimer"
               >
-                <FaTimes />
+                <FaTimes size={16} />
               </button>
             ) : (
               <>
                 <button
                   onClick={onAddToRead}
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                  title="Ajouter à 'à lire'"
+                  className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
+                  style={{ backgroundColor: '#4D9F38', hover: { backgroundColor: '#3A7A2B' } }}
+                  title="Ajouter à 'À lire'"
                 >
-                  <FaBook />
+                  <FaBookmark size={16} />
                 </button>
                 <button
                   onClick={onAddToReadBooks}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded flex items-center"
+                  className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
+                  style={{ backgroundColor: '#67AAB3', hover: { backgroundColor: '#4F8893' } }}
                   title="Ajouter à 'Lu'"
                 >
-                  <FaCheck />
+                  <FaBookOpen size={16} />
                 </button>
                 <button
                   onClick={onAddToDislikedBooks}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
+                  className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
+                  style={{ backgroundColor: '#D25C28', hover: { backgroundColor: '#A04420' } }}
                   title="Ajouter à 'Pas intéressé'"
                 >
-                  <FaTimes />
+                  <FaTimes size={16} />
                 </button>
               </>
             )}
@@ -99,7 +109,7 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
       >
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
           <button onClick={closeModal} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-            <FaTimes size={20} />
+            <FaTimes size={16} />
           </button>
           <div className="flex justify-between items-start">
             <h2 className="text-2xl font-bold mb-4">{book.title}</h2>
@@ -127,7 +137,7 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
           <div className="mt-4 flex justify-end">
             <button
               onClick={closeModal}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-red-500 text-white font-bold py-1 px-3 rounded"
             >
               Fermer
             </button>
