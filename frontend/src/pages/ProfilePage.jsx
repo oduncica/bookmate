@@ -14,7 +14,7 @@ import { FaFire } from "react-icons/fa";
 const ProfilePage = () => {
   const { authUser, logout, updateProfile } = useAuthStore();
   const [email, setEmail] = useState("");
-  const [bookPreferences, setBookPreferences] = useState("");
+  const [bookPreferences, setBookPreferences] = useState([]);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [showPasswordFields, setShowPasswordFields] = useState(false);
@@ -25,7 +25,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (authUser) {
       setEmail(authUser.email);
-      setBookPreferences(authUser.bookPreferences?.join(", ") || "");
+      setBookPreferences(authUser.bookPreferences);
     }
   }, [authUser]);
 
@@ -100,15 +100,24 @@ const ProfilePage = () => {
           <p className="text-lg text-white font-nunito">
             Mes genres de livres préférés
           </p>
-          <button
+          {/* <button
             onClick={() => setShowPreferencesField(!showPreferencesField)}
             className="text-white"
           >
             <FontAwesomeIcon icon={faChevronRight} size="lg" />
-          </button>
+          </button> */}
+          <Link
+            to={{
+              pathname: "/questionnaire",
+            }}
+            state={{ selectedGenres: bookPreferences, isProfileUpdate: true }} // Indique que c'est une mise à jour
+            className="text-white"
+          >
+            <FontAwesomeIcon icon={faChevronRight} size="lg" />
+          </Link>
         </div>
 
-        {showPreferencesField && (
+        {/* {showPreferencesField && (
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               Préférences de lecture
@@ -121,7 +130,7 @@ const ProfilePage = () => {
               placeholder="Ex: Science-fiction, Fantasy, Thriller"
             />
           </div>
-        )}
+        )} */}
 
         {/* Mes livres ignorés */}
         <div className="flex justify-between items-center">
@@ -178,12 +187,16 @@ const ProfilePage = () => {
           <p className="text-lg text-white font-nunito">
             Changer de mot de passe
           </p>
-          <button
+          {/* <button
             onClick={() => setShowPasswordFields(!showPasswordFields)}
             className="text-white"
           >
             <FontAwesomeIcon icon={faChevronRight} size="lg" />
-          </button>
+          </button> */}
+
+          <Link to="/passwordreset" className="text-white">
+            <FontAwesomeIcon icon={faChevronRight} size="lg" />
+          </Link>
         </div>
 
         {showPasswordFields && (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { FaFire } from "react-icons/fa";
@@ -127,10 +127,16 @@ const colorMap = {
 const Questionnaire = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [expandedGenres, setExpandedGenres] = useState({});
-  const { signup, loading } = useAuthStore();
+  const { signup, updateProfile, loading } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const { email, password } = location.state;
+  const { email, password, isProfileUpdate } = location.state || {};
+
+  useEffect(() => {
+    if (location.state?.selectedGenres) {
+      setSelectedGenres(location.state.selectedGenres);
+    }
+  }, [location.state]);
 
   const handleSelectGenre = (genre) => {
     if (selectedGenres.includes(genre)) {
@@ -153,10 +159,22 @@ const Questionnaire = () => {
       alert("Veuillez sélectionner au moins un genre avant de soumettre.");
       return;
     }
-    await signup(
-      { email, password, bookPreferences: selectedGenres },
-      navigate
-    );
+
+    try {
+      if (isProfileUpdate) {
+        // Mise à jour des préférences depuis la page de profil
+        await updateProfile({ newBookPreferences: selectedGenres });
+        navigate("/profile");
+      } else {
+        // Inscription avec les préférences
+        await signup(
+          { email, password, bookPreferences: selectedGenres },
+          navigate
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission :", error);
+    }
   };
 
   return (
@@ -166,7 +184,7 @@ const Questionnaire = () => {
         backgroundSize: "200%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#3A3A64", // Couleur de fond
+        backgroundColor: "#3A3A64",
       }}
     >
       <img src={logo} alt="Logo" className="mb-4 object-none" />
@@ -180,23 +198,19 @@ const Questionnaire = () => {
         Quels genres de livres aimez-vous ?
       </h4>
       <div className="flex flex-wrap gap-4 justify-start mb-6">
-        {" "}
-        {/* Alignement à gauche */}
         {Object.entries(genres).map(([genre, subGenres], index) => (
           <div key={index} className="w-full">
             <h4 className="text-xl text-white mb-2 text-left font-nunito">
               {genre}
             </h4>
             <div className="flex flex-wrap gap-3 justify-start mb-4">
-              {" "}
-              {/* Réduction de l'espace entre les boutons */}
               {(expandedGenres[genre] ? subGenres : subGenres.slice(0, 3)).map(
                 (subGenre, subIndex) => (
                   <button
                     key={subIndex}
                     className={`px-3 py-1.5 rounded-full border font-bold text-white font-nunito transition-transform transform ${
                       selectedGenres.includes(subGenre)
-                        ? `${colorMap[subGenre]} border-none scale-105` // Suppression de border-white quand sélectionné
+                        ? `${colorMap[subGenre]} border-none scale-105`
                         : "bg-transparent border-white text-white hover:scale-105"
                     }`}
                     onClick={() => handleSelectGenre(subGenre)}
@@ -225,11 +239,17 @@ const Questionnaire = () => {
         disabled={loading}
       >
         {loading ? (
-          "Inscription en cours..."
+          isProfileUpdate ? (
+            "Mise à jour en cours..."
+          ) : (
+            "Inscription en cours..."
+          )
         ) : (
           <>
             <FaFire className="mr-1" />
-            Découvrir mes recommandations
+            {isProfileUpdate
+              ? "Mettre à jour mes préférences"
+              : "Découvrir mes recommandations"}
           </>
         )}
       </button>
