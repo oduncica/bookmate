@@ -13,13 +13,19 @@ const HomePage = () => {
   }, [fetchSuggestions]);
 
   const handleSwipe = async (direction) => {
-    if (direction === "right" && suggestions[currentIndex]) {
-      await handleLike(suggestions[currentIndex].id);
-    } else if (direction === "left" && suggestions[currentIndex]) {
-      await handleDislike(suggestions[currentIndex].id);
+  if (suggestions[currentIndex]) {
+    if (direction === "right") {
+      await likeBook(suggestions[currentIndex].id);
+    } else if (direction === "left") {
+      await dislikeBook(suggestions[currentIndex].id);
     }
-  };
 
+    setCurrentIndex((prevIndex) => prevIndex + 1); // ✅ Forcer l'affichage du livre suivant
+  }
+};
+
+  
+  
   const handlers = useSwipeable({
     onSwipedLeft: () => handleSwipe("left"),
     onSwipedRight: () => handleSwipe("right"),
@@ -27,17 +33,12 @@ const HomePage = () => {
 
   const handleLike = async (bookId) => {
     await likeBook(bookId);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-    );
   };
-
+  
   const handleDislike = async (bookId) => {
     await dislikeBook(bookId);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-    );
   };
+  
 
   const handleRead = async (bookId) => {
     await readBook(bookId);
@@ -61,18 +62,18 @@ const HomePage = () => {
         {...handlers} // Attacher les handlers ici pour capter les swipes
         className="flex justify-center items-center w-full h-full"
       >
-        {Array.isArray(suggestions) && suggestions.length > 0 ? (
-          <TinderBookCard
-            book={suggestions[currentIndex]}
-            onLike={handleLike}
-            onDislike={handleDislike}
-            onRead={handleRead}
-          />
-        ) : (
-          <p className="text-center text-xl text-white">
-            Aucune suggestion de livre disponible.
-          </p>
-        )}
+      {Array.isArray(suggestions) && suggestions.length > 0 && currentIndex < suggestions.length ? (
+  <TinderBookCard
+    book={suggestions[currentIndex]}
+    onLike={handleLike}
+    onDislike={handleDislike}
+    onRead={handleRead}
+    onSwipe={handleSwipe}
+  />
+) : (
+  <p className="text-center text-xl text-white">Aucune suggestion de livre disponible.</p>
+)}
+
       </div>
     </div>
   );

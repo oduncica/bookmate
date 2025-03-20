@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { FaFire } from "react-icons/fa";
+import { FaFire, FaTimes } from "react-icons/fa";
 import logo from "../images/logoHorizontal.png"; // Import de l'image
 
 const genres = {
@@ -98,7 +98,7 @@ const colorMap = {
   "Littérature latino-américaine": "bg-soft-pink",
   "Littérature européenne": "bg-lavender",
   "Littérature autochtone": "bg-blue-light",
-  Nouvelle: "bg-custom-dark-blue",
+  "Nouvelle": "bg-light-yellow",
   "Littérature française": "bg-violet",
   Classique: "bg-dark-green",
   Mythologie: "bg-orange",
@@ -169,6 +169,13 @@ const Questionnaire = () => {
         backgroundColor: "#3A3A64", // Couleur de fond
       }}
     >
+       {/* Bouton pour revenir en arrière */}
+       <button
+        className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition"
+        onClick={() => navigate("/Auth")}
+      >
+        <FaTimes />
+      </button>
       <img src={logo} alt="Logo" className="mb-4 object-none" />
       <h3 className="text-xl font-bold text-white mb-4 text-center font-platypi">
         Dites-nous en plus sur vos goûts...
@@ -218,21 +225,22 @@ const Questionnaire = () => {
         ))}
       </div>
       <button
-        onClick={handleSubmit}
-        className={`w-full max-w-xs flex justify-start items-center py-1.5 px-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-custom-orange hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-orange transition-transform transform ${
-          loading ? "cursor-not-allowed" : "hover:scale-105"
-        }`}
-        disabled={loading}
-      >
-        {loading ? (
-          "Inscription en cours..."
-        ) : (
-          <>
-            <FaFire className="mr-1" />
-            Découvrir mes recommandations
-          </>
-        )}
-      </button>
+  onClick={handleSubmit}
+  className={`w-full max-w-xs flex justify-center items-center py-1.5 px-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-custom-orange hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-orange transition-transform transform ${
+    loading ? "cursor-not-allowed" : "hover:scale-105"
+  }`}
+  disabled={loading}
+>
+  {loading ? (
+    "Inscription en cours..."
+  ) : (
+    <>
+      <FaFire className="mr-1" />
+      Découvrir mes recommandations
+    </>
+  )}
+</button>
+
     </div>
   );
 };

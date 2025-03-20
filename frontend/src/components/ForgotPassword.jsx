@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Ajout de useNavigate
 import axiosInstance from "../lib/axios";
+import { FaTimes } from "react-icons/fa";
+
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +37,15 @@ const ForgotPassword = () => {
         backgroundColor: "#3A3A64",
       }}
     >
+       {/* Bouton pour revenir en arrière */}
+       <button
+        className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition"
+        onClick={() => navigate("/Auth")} // Maintenant ça fonctionne
+      >
+        <FaTimes />
+      </button>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold text-center mb-6 text-custom-orange">
+        <h1 className="text-2xl font-bold text-center mb-6 text-custom-orange font-platypi">
           Réinitialisation du mot de passe
         </h1>
         {loading && <p className="text-center text-gray-500">Loading...</p>}
