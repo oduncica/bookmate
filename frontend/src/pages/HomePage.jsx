@@ -1,49 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useSuggestionsStore } from "../store/useSuggestionsStore";
 import TinderBookCard from "../components/TinderBookCard";
-import { useSwipeable } from "react-swipeable";
 
 const HomePage = () => {
   const { suggestions, fetchSuggestions, likeBook, dislikeBook, readBook } =
     useSuggestionsStore();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [stack, setStack] = useState([]);
 
   useEffect(() => {
     fetchSuggestions();
   }, [fetchSuggestions]);
 
-  const handleSwipe = async (direction) => {
-    if (direction === "right" && suggestions[currentIndex]) {
-      await handleLike(suggestions[currentIndex].id);
-    } else if (direction === "left" && suggestions[currentIndex]) {
-      await handleDislike(suggestions[currentIndex].id);
+  useEffect(() => {
+    setStack(suggestions);
+  }, [suggestions]);
+
+  const handleSwipe = async (bookId, direction) => {
+    if (direction === "right") {
+      await likeBook(bookId);
+    } else if (direction === "left") {
+      await dislikeBook(bookId);
     }
-  };
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => handleSwipe("left"),
-    onSwipedRight: () => handleSwipe("right"),
-  });
-
-  const handleLike = async (bookId) => {
-    await likeBook(bookId);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-    );
-  };
-
-  const handleDislike = async (bookId) => {
-    await dislikeBook(bookId);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-    );
-  };
-
-  const handleRead = async (bookId) => {
-    await readBook(bookId);
-    setCurrentIndex((prevIndex) =>
-      prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
-    );
+    setStack((prevStack) => prevStack.slice(1)); // Supprimer la carte du stack après un swipe
   };
 
   return (
@@ -54,20 +32,33 @@ const HomePage = () => {
         backgroundSize: "200%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#3A3A64", // Violet background
+        backgroundColor: "#3A3A64",
+        paddingBottom: "80px", // Ajoute un padding-bottom pour éviter que la navbar cache le contenu
       }}
     >
-      <div
-        {...handlers} // Attacher les handlers ici pour capter les swipes
-        className="flex justify-center items-center w-full h-full"
-      >
-        {Array.isArray(suggestions) && suggestions.length > 0 ? (
-          <TinderBookCard
-            book={suggestions[currentIndex]}
-            onLike={handleLike}
-            onDislike={handleDislike}
-            onRead={handleRead}
-          />
+      <div className="relative w-full max-w-sm h-[650px]">
+        {stack.length > 0 ? (
+          stack.map((book, index) => (
+            <TinderBookCard
+              key={book.id}
+              book={book}
+              onSwipe={handleSwipe}
+              onLike={(bookId) => handleSwipe(bookId, "right")}
+              onDislike={(bookId) => handleSwipe(bookId, "left")}
+              onRead={async (bookId) => {
+                await readBook(bookId);
+                handleSwipe(bookId, "read");
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                zIndex: stack.length - index, // Empile les cartes correctement
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          ))
         ) : (
           <p className="text-center text-xl text-white">
             Aucune suggestion de livre disponible.
