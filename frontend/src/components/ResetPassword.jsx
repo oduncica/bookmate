@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 
+
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const ResetPassword = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
       style={{
         backgroundImage: "url('/bg_image.png')",
         backgroundSize: "200%",
@@ -48,6 +49,7 @@ const ResetPassword = () => {
         backgroundColor: "#3A3A64",
       }}
     >
+
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-center mb-6 text-custom-orange">
           Réinitialiser le mot de passe

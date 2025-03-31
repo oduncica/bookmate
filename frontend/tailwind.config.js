@@ -28,6 +28,11 @@ export default {
         'violet': '#543787',
         'dark-green': '#526049',
         'orange': '#f29b3a',
+        'rouge': '#EF476F',
+        'lavande':'#B57EDC',  
+        'menthe':'#06D6A0',
+        'magic-blue':'#6D72C3',
+        'jaune':'#FFD166',
 
         //couleur boutons
         'lu-color':'#67AAB3',

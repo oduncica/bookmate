@@ -72,6 +72,9 @@ const ProfilePage = () => {
       className="min-h-screen bg-cover bg-center flex flex-col items-center p-6"
       style={{
         backgroundImage: "url('/bg_image.png')",
+        backgroundSize: "200%",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         backgroundColor: "#3A3A64",
       }}
     >

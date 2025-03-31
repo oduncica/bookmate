@@ -21,7 +21,8 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
   const closeModal = () => setModalIsOpen(false);
 
   return (
-    <div className="max-w-md rounded-lg overflow-hidden shadow-lg m-2 bg-white text-[#3A3A64]">
+    <div className="max-w-md rounded-lg overflow-hidden shadow-lg m-2 bg-white text-[#3A3A64] cursor-pointer"
+    onClick={openModal}>
       <div className="flex items-center">
         {book.image ? (
           <img 
@@ -107,10 +108,8 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
         className="fixed inset-0 flex items-center justify-center z-50"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
       >
-        <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
-          <button onClick={closeModal} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-            <FaTimes size={16} />
-          </button>
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative"
+        onClick={(e) => e.stopPropagation()} >
           <div className="flex justify-between items-start">
             <h2 className="text-2xl font-bold mb-4">{book.title}</h2>
           </div>

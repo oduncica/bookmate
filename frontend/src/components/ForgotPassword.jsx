@@ -1,7 +1,10 @@
 import { useState } from "react";
 import axiosInstance from "../lib/axios";
+import { useNavigate } from "react-router-dom";
+import { FaTimes } from "react-icons/fa"; // Import de l'icône croix
 
 const ForgotPassword = () => {
+  const navigate = useNavigate(); // 🔹 Initialisation de navigate
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +27,7 @@ const ForgotPassword = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
       style={{
         backgroundImage: "url('/bg_image.png')",
         backgroundSize: "200%",
@@ -33,6 +36,13 @@ const ForgotPassword = () => {
         backgroundColor: "#3A3A64",
       }}
     >
+       {/* 🔹 Bouton de fermeture fonctionnel */}
+       <button
+        onClick={() => navigate(-1)} // 🔹 navigate(-1) permet de revenir à la page précédente
+        className="absolute top-6 right-6 text-white text-3xl hover:text-gray-300 transition z-50"
+      >
+        <FaTimes />
+      </button>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-center mb-6 text-custom-orange">
           Réinitialisation du mot de passe

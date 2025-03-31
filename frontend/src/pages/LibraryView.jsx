@@ -51,7 +51,7 @@ const LibraryView = () => {
       className="container mx-auto px-4 py-8"
       style={{
         background: "url('/bg_image.png') center / 200% no-repeat, #3A3A64",
-        minHeight: '100vh',
+        minHeight: '170vh',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

@@ -6,8 +6,10 @@ import HomePage from "./pages/HomePage";
 import WelcomeScreen from "./pages/WelcomeScreen";
 import ProfilePage from "./pages/ProfilePage";
 import LibraryView from "./pages/LibraryView";
+import TermsPage from "./pages/TermsPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 import IgnoredBooks from "./components/IgnoredBooks";
 import AdvancedSearch from "./components/AvancedSearch";
@@ -59,6 +61,14 @@ function App() {
           <Route
             path="/search"
             element={authUser ? <AdvancedSearch /> : <Navigate to="/auth" />}
+          />
+          <Route 
+            path="/terms" 
+            element={authUser ? <TermsPage /> : <Navigate to="/auth" />}
+          />
+          <Route 
+          path="/privacy"
+          element={authUser ? <PrivacyPolicy /> : <Navigate to="/auth"/>} 
           />
           <Route path="/passwordreset" element={<ForgotPassword />} />
           <Route path="/passwordreset/:token" element={<ResetPassword />} />

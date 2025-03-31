@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { FaFire } from "react-icons/fa";
+import { FaTimes, FaFire } from "react-icons/fa";
 import logo from "../images/logoHorizontal.png"; // Import de l'image
 
 const genres = {
@@ -73,13 +73,13 @@ const colorMap = {
   Mystère: "bg-custom-green2",
   "Science-fiction": "bg-custom-turquoise",
   Fantaisie: "bg-custom-darker-orange",
-  Aventure: "bg-light-blue",
-  Drame: "bg-light-yellow",
-  "Santé et bien-être": "bg-light-pink",
+  Aventure: "bg-menthe",
+  Drame: "bg-magic-blue",
+  "Santé et bien-être": "bg-jaune",
   Musique: "bg-soft-pink",
   Recettes: "bg-lavender",
   Technologie: "bg-blue-light",
-  Philosophie: "bg-custom-dark-blue",
+  Philosophie: "bg-rouge",
   Histoire: "bg-violet",
   Arts: "bg-dark-green",
   Science: "bg-orange",
@@ -92,13 +92,13 @@ const colorMap = {
   "Développement personnel": "bg-custom-green2",
   "Coming of age": "bg-custom-turquoise",
   Poésie: "bg-custom-darker-orange",
-  "Littérature LGBTQ+": "bg-light-blue",
-  "Littérature africaine": "bg-light-yellow",
-  "Littérature asiatique": "bg-light-pink",
+  "Littérature LGBTQ+": "bg-lavande",
+  "Littérature africaine": "bg-magic-blue",
+  "Littérature asiatique": "bg-jaune",
   "Littérature latino-américaine": "bg-soft-pink",
   "Littérature européenne": "bg-lavender",
   "Littérature autochtone": "bg-blue-light",
-  Nouvelle: "bg-custom-dark-blue",
+  Nouvelle: "bg-rouge",
   "Littérature française": "bg-violet",
   Classique: "bg-dark-green",
   Mythologie: "bg-orange",
@@ -111,13 +111,13 @@ const colorMap = {
   "Utopie/Dystopie": "bg-custom-green2",
   "Chick-lit": "bg-custom-turquoise",
   Politique: "bg-custom-darker-orange",
-  Scientifique: "bg-light-blue",
-  Sportive: "bg-light-yellow",
-  Artistique: "bg-light-pink",
+  Scientifique: "bg-menthe",
+  Sportive: "bg-magic-blue",
+  Artistique: "bg-jaune",
   Épique: "bg-soft-pink",
   Lyrique: "bg-lavender",
   Satirique: "bg-blue-light",
-  Narrative: "bg-custom-dark-blue",
+  Narrative: "bg-rouge",
   Comédie: "bg-violet",
   Tragédie: "bg-dark-green",
   "Drame historique": "bg-orange",
@@ -187,6 +187,13 @@ const Questionnaire = () => {
         backgroundColor: "#3A3A64",
       }}
     >
+      {/* Bouton de fermeture */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition"
+      >
+        <FaTimes />
+      </button>
       <img src={logo} alt="Logo" className="mb-4 object-none" />
       <h3 className="text-xl font-bold text-white mb-4 text-center font-platypi">
         Dites-nous en plus sur vos goûts...
@@ -233,7 +240,7 @@ const Questionnaire = () => {
       </div>
       <button
         onClick={handleSubmit}
-        className={`w-full max-w-xs flex justify-start items-center py-1.5 px-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-custom-orange hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-orange transition-transform transform ${
+        className={`w-full max-w-xs flex justify-center items-center py-1.5 px-3 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-custom-orange hover:bg-custom-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-orange transition-transform transform ${
           loading ? "cursor-not-allowed" : "hover:scale-105"
         }`}
         disabled={loading}

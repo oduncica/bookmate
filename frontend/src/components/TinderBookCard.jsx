@@ -14,14 +14,39 @@ const TinderBookCard = ({ book, onLike, onDislike, onRead }) => {
       ? description.substring(0, 150) + "..."
       : description;
 
+      const getBestImage = (imageLinks) => {
+        if (!imageLinks) return null;
+      
+        // Vérifie chaque version d'image et retourne la première disponible
+        return (
+          imageLinks.extraLarge ||
+          imageLinks.large ||
+          imageLinks.medium ||
+          imageLinks.thumbnail ||
+          imageLinks.smallThumbnail ||
+          null
+        );
+      };
+      const enhanceImageQuality = (url) => {
+        if (!url) return null;
+        return url.replace(/=s\d+-/, "=s1000-"); // Force une meilleure qualité
+      };
+      const imageUrl = getBestImage(book.volumeInfo.imageLinks);
+      const enhancedImageUrl = enhanceImageQuality(imageUrl);
+      const finalImageUrl = enhancedImageUrl || "https://via.placeholder.com/200x300?text=Pas+d'image";
+                  
+
   return (
     <div className="max-w-sm w-full rounded-lg overflow-hidden shadow-lg bg-white text-black flex flex-col items-center">
       {book.volumeInfo.imageLinks ? (
         <img
-          className="w-full h-96 object-cover"
-          src={book.volumeInfo.imageLinks.thumbnail}
-          alt={book.volumeInfo.title}
-        />
+        className="w-full h-96 object-cover"
+        src={finalImageUrl}
+        alt={book.volumeInfo.title}
+      />
+      
+      
+      
       ) : (
         <div className="w-full h-96 bg-gray-200 flex items-center justify-center">
           <span className="text-gray-500">Image non disponible</span>
