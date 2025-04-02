@@ -61,34 +61,36 @@ const BookCard = ({ book, onAddToRead, onAddToReadBooks, onAddToDislikedBooks, o
           </div>
 
           <div className="mt-2 flex justify-start space-x-2">
-            {isLibraryView ? (
-              <button
-                onClick={onDelete}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded flex items-center text-sm"
-                title="Supprimer"
-              >
-                <FaTimes size={16} />
-              </button>
-            ) : (
+          {isLibraryView ? (
+  <button
+    onClick={(e) => { e.stopPropagation(); onDelete(); }}
+    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded flex items-center text-sm"
+    title="Supprimer"
+  >
+    <FaTimes size={16} />
+  </button>
+) : (
               <>
                 <button
-                  onClick={onAddToRead}
+                  onClick={(e) => { e.stopPropagation(); onAddToRead(); }}
                   className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
                   style={{ backgroundColor: '#4D9F38', hover: { backgroundColor: '#3A7A2B' } }}
                   title="Ajouter à 'À lire'"
                 >
                   <FaBookmark size={16} />
                 </button>
+
                 <button
-                  onClick={onAddToReadBooks}
+                  onClick={(e) => { e.stopPropagation(); onAddToReadBooks(); }}
                   className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
                   style={{ backgroundColor: '#67AAB3', hover: { backgroundColor: '#4F8893' } }}
                   title="Ajouter à 'Lu'"
                 >
                   <FaBookOpen size={16} />
                 </button>
+
                 <button
-                  onClick={onAddToDislikedBooks}
+                  onClick={(e) => { e.stopPropagation(); onAddToDislikedBooks(); }}
                   className="text-white font-bold py-1 px-3 rounded flex items-center text-sm"
                   style={{ backgroundColor: '#D25C28', hover: { backgroundColor: '#A04420' } }}
                   title="Ajouter à 'Pas intéressé'"

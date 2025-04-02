@@ -1,5 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import HomePage from "./pages/HomePage";
@@ -10,7 +10,6 @@ import TermsPage from "./pages/TermsPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import PrivacyPolicy from "./components/PrivacyPolicy";
-
 import IgnoredBooks from "./components/IgnoredBooks";
 import AdvancedSearch from "./components/AvancedSearch";
 import Questionnaire from "./components/Questionnaire";
@@ -20,16 +19,22 @@ import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
   const { checkAuth, authUser, checkingAuth } = useAuthStore();
+  const location = useLocation();
+  const [showNavbar, setShowNavbar] = useState(true);
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    // Liste des pages où la navbar doit être cachée
+    const hiddenNavbarRoutes = ["/questionnaire"];
+    
+    // Vérifie si l'URL actuelle est dans la liste et met à jour showNavbar
+    setShowNavbar(!hiddenNavbarRoutes.includes(location.pathname));
+  }, [location.pathname]);
 
   if (checkingAuth) return null;
 
   return (
     <div className="min-h-screen">
-      {authUser && <Navbar />}
+      {authUser && showNavbar && <Navbar />}
       <div>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
@@ -62,14 +67,8 @@ function App() {
             path="/search"
             element={authUser ? <AdvancedSearch /> : <Navigate to="/auth" />}
           />
-          <Route 
-            path="/terms" 
-            element={authUser ? <TermsPage /> : <Navigate to="/auth" />}
-          />
-          <Route 
-          path="/privacy"
-          element={authUser ? <PrivacyPolicy /> : <Navigate to="/auth"/>} 
-          />
+          <Route path="/terms" element={authUser ? <TermsPage /> : <Navigate to="/auth" />} />
+          <Route path="/privacy" element={authUser ? <PrivacyPolicy /> : <Navigate to="/auth"/>} />
           <Route path="/passwordreset" element={<ForgotPassword />} />
           <Route path="/passwordreset/:token" element={<ResetPassword />} />
         </Routes>
